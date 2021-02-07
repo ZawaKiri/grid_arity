@@ -192,7 +192,8 @@ class _MenuPageState extends State<MenuPage> {
                                                                   },
                                                                 )),
                                                             style: AlertStyle(
-                                                              isOverlayTapDismiss: true,
+                                                                isOverlayTapDismiss:
+                                                                    true,
                                                                 animationType:
                                                                     AnimationType
                                                                         .grow,
@@ -251,7 +252,7 @@ class _MenuPageState extends State<MenuPage> {
                                             }),
                                       ),
                                       style: AlertStyle(
-                                        isOverlayTapDismiss: true,
+                                          isOverlayTapDismiss: true,
                                           animationType: AnimationType.grow,
                                           animationDuration:
                                               Duration(seconds: 1),
@@ -399,8 +400,10 @@ class _ArityPageState extends State<ArityPage> {
               } else if (snapshot.connectionState == ConnectionState.done) {
                 Map records = json.decode(storage.getItem('records'));
                 Map rec = {...records};
-                if (double.parse(records['$power,$n']) > sw.elapsedMilliseconds / 1000) {
-                  records['$power,$n'] = (sw.elapsedMilliseconds / 1000).toString();
+                if (double.parse(records['$power,$n']) >
+                    sw.elapsedMilliseconds / 1000) {
+                  records['$power,$n'] =
+                      (sw.elapsedMilliseconds / 1000).toString();
                   storage.setItem('records', json.encode(records));
                 }
                 return Text('${rec['$power,$n']} sec');
@@ -547,8 +550,13 @@ class _ArityPageState extends State<ArityPage> {
                                                         .height -
                                                     d / 18,
                                                 MediaQuery.of(context)
-                                                    .size
-                                                    .width) /
+                                                        .size
+                                                        .width -
+                                                    80 / n -
+                                                    MediaQuery.of(context)
+                                                            .size
+                                                            .width /
+                                                        n) /
                                             n -
                                         40 / n,
                                     height: min(
@@ -557,8 +565,13 @@ class _ArityPageState extends State<ArityPage> {
                                                         .height -
                                                     d / 18,
                                                 MediaQuery.of(context)
-                                                    .size
-                                                    .width) /
+                                                        .size
+                                                        .width -
+                                                    80 / n -
+                                                    MediaQuery.of(context)
+                                                            .size
+                                                            .width /
+                                                        n) /
                                             n -
                                         40 / n,
                                     child: Container(
@@ -612,16 +625,24 @@ class _ArityPageState extends State<ArityPage> {
                           padding: EdgeInsets.fromLTRB(
                               40 / n, 20 / n, 40 / n, 20 / n),
                           child: SizedBox(
-                            width:
-                                min(MediaQuery.of(context).size.height - d / 18,
-                                            MediaQuery.of(context).size.width) /
-                                        n -
-                                    40 / n,
-                            height:
-                                min(MediaQuery.of(context).size.height - d / 18,
-                                            MediaQuery.of(context).size.width) /
-                                        n -
-                                    40 / n,
+                            width: min(
+                                        MediaQuery.of(context).size.height -
+                                            d / 18,
+                                        MediaQuery.of(context).size.width -
+                                            80 / n -
+                                            MediaQuery.of(context).size.width /
+                                                n) /
+                                    n -
+                                40 / n,
+                            height: min(
+                                        MediaQuery.of(context).size.height -
+                                            d / 18,
+                                        MediaQuery.of(context).size.width -
+                                            80 / n -
+                                            MediaQuery.of(context).size.width /
+                                                n) /
+                                    n -
+                                40 / n,
                             child: Container(
                               color: l[index] == 0
                                   ? Colors.red

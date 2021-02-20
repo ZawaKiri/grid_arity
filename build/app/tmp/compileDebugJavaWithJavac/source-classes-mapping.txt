@@ -1,0 +1,4 @@
+io/flutter/plugins/GeneratedPluginRegistrant.java
+ io.flutter.plugins.GeneratedPluginRegistrant
+com/example/grid_arity/BuildConfig.java
+ com.example.grid_arity.BuildConfig

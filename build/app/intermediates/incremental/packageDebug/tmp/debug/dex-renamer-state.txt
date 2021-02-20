@@ -1,0 +1,4 @@
+#Fri Feb 12 18:52:18 CET 2021
+base.0=/home/anamsaidie/AndroidStudioProjects/grid_arity/build/app/intermediates/dex/debug/mergeDexDebug/classes.dex
+path.0=classes.dex
+renamed.0=classes.dex

@@ -367,6 +367,7 @@ class _ArityPageState extends State<ArityPage> {
   var ta = 0;
   var sw = new Stopwatch();
   var storage = LocalStorage('records');
+  var zoom = false;
 
   _ArityPageState(
       {@required this.n,
@@ -493,6 +494,14 @@ class _ArityPageState extends State<ArityPage> {
         backgroundColor: Colors.lightGreen,
         toolbarHeight: d / 18,
         actions: [
+          Icon(Icons.search, color: Colors.black, size: d / 24),
+          Switch(
+              value: zoom,
+              onChanged: (value) {
+                setState(() {
+                  zoom = value;
+                });
+              }),
           Center(
               child: Text('Base $power  ',
                   style: TextStyle(fontSize: d / 24, color: Colors.black),
@@ -527,6 +536,7 @@ class _ArityPageState extends State<ArityPage> {
           ),
           ClipRect(
             child: InteractiveViewer(
+              scaleEnabled: zoom,
               minScale: .5,
               maxScale: 10,
               child: Center(

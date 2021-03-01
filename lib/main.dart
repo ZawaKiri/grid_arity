@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:grid_arity/balanced.dart';
 import 'package:localstorage/localstorage.dart';
 import 'dart:ui';
 import 'dart:math';
@@ -35,6 +36,7 @@ class _MenuPageState extends State<MenuPage> {
   var power = 2;
   var liste = List.generate(32 * log(2) ~/ log(2) - 1, (index) => index + 2);
   final _scaffoldKey = new GlobalKey<ScaffoldState>();
+  var balanced = false;
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +76,7 @@ class _MenuPageState extends State<MenuPage> {
               Expanded(
                 child: ListView.builder(
                     shrinkWrap: true,
-                    itemCount: 35,
+                    itemCount: 22,
                     itemBuilder: (context, index) {
                       return Padding(
                         padding: const EdgeInsets.all(2.0),
@@ -83,16 +85,28 @@ class _MenuPageState extends State<MenuPage> {
                           child: Center(
                             child: RadioListTile(
                               activeColor: Colors.red,
-                              title: Text('base ${index + 2}',
+                              title: Text(
+                                  index < 15
+                                      ? 'base ${index + 2}'
+                                      : 'balanced ${2 * (index - 15) + 3}',
                                   style: TextStyle(fontSize: d / 36)),
                               value: index + 2,
                               groupValue: power,
                               onChanged: (value) {
                                 setState(() {
-                                  power = value;
-                                  liste = List.generate(
-                                      32 * log(2) ~/ log(value) - 1,
-                                      (ind) => ind + 2);
+                                  if (value < 17) {
+                                    power = value;
+                                    liste = List.generate(
+                                        32 * log(2) ~/ log(value) - 1,
+                                        (ind) => ind + 2);
+                                    balanced = false;
+                                  } else {
+                                    power = value;
+                                    liste = List.generate(
+                                        32 * log(2) ~/ log(2 * (value - 17) + 3) - 1,
+                                            (ind) => ind + 2);
+                                    balanced = true;
+                                  }
                                 });
                               },
                             ),
@@ -318,14 +332,14 @@ class _MenuPageState extends State<MenuPage> {
           ),
           itemCount: liste.length,
           itemBuilder: (BuildContext context, int index) {
-            return new FlatButton(
-              color: Colors.blue,
+            return new TextButton(
+              style: TextButton.styleFrom(primary: Colors.black, backgroundColor: Colors.blue),
               onPressed: () {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) =>
-                            ArityPage(n: liste[index], d: d, power: power)));
+                            balanced == false ? ArityPage(n: liste[index], d: d, power: power) : BalancedPage(n: liste[index], d: d, power: 2 * (power - 17) + 3)));
               },
               child: Text(
                 liste[index].toString(),
@@ -368,6 +382,7 @@ class _ArityPageState extends State<ArityPage> {
   var sw = new Stopwatch();
   var storage = LocalStorage('records');
   var zoom = false;
+  var wheel = false;
 
   _ArityPageState(
       {@required this.n,
@@ -391,29 +406,37 @@ class _ArityPageState extends State<ArityPage> {
       Alert(
         title: 'Time : ${sw.elapsedMilliseconds / 1000}s',
         context: context,
-        content: FutureBuilder(
-            future: storage.ready,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return CircularProgressIndicator(
-                  backgroundColor: Colors.black,
-                );
-              } else if (snapshot.connectionState == ConnectionState.done) {
-                Map records = json.decode(storage.getItem('records'));
-                Map rec = {...records};
-                if (double.parse(records['$power,$n']) >
-                    sw.elapsedMilliseconds / 1000) {
-                  records['$power,$n'] =
-                      (sw.elapsedMilliseconds / 1000).toString();
-                  storage.setItem('records', json.encode(records));
-                }
-                return Text('${rec['$power,$n']} sec');
-              } else
-                return Text(
-                  'Error loading High Scores',
-                  style: TextStyle(fontSize: d / 32, color: Colors.black),
-                );
-            }),
+        content: Column(
+          children: [
+            Text(
+              '$liste',
+              style: TextStyle(fontSize: d / 32),
+            ),
+            FutureBuilder(
+                future: storage.ready,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return CircularProgressIndicator(
+                      backgroundColor: Colors.black,
+                    );
+                  } else if (snapshot.connectionState == ConnectionState.done) {
+                    Map records = json.decode(storage.getItem('records'));
+                    Map rec = {...records};
+                    if (double.parse(records['$power,$n']) >
+                        sw.elapsedMilliseconds / 1000) {
+                      records['$power,$n'] =
+                          (sw.elapsedMilliseconds / 1000).toString();
+                      storage.setItem('records', json.encode(records));
+                    }
+                    return Text('${rec['$power,$n']} sec');
+                  } else
+                    return Text(
+                      'Error loading High Scores',
+                      style: TextStyle(fontSize: d / 32, color: Colors.black),
+                    );
+                }),
+          ],
+        ),
         style: AlertStyle(
             animationType: AnimationType.grow,
             animationDuration: Duration(seconds: 0),
@@ -502,6 +525,14 @@ class _ArityPageState extends State<ArityPage> {
                   zoom = value;
                 });
               }),
+          /*Icon(Icons.touch_app, color: Colors.black, size: d / 24),
+          Switch(
+              value: !wheel,
+              onChanged: (value) {
+                setState(() {
+                  wheel = !value;
+                });
+              }),*/
           Center(
               child: Text('Base $power  ',
                   style: TextStyle(fontSize: d / 24, color: Colors.black),
@@ -515,7 +546,7 @@ class _ArityPageState extends State<ArityPage> {
             : Axis.vertical,
         children: <Widget>[
           Expanded(
-            child: FlatButton(
+            child: TextButton(
               child: Column(
                 children: [
                   Expanded(
@@ -586,39 +617,84 @@ class _ArityPageState extends State<ArityPage> {
                                         40 / n,
                                     child: Container(
                                       color: Colors.blue,
-                                      child: Stack(
-                                          fit: StackFit.expand,
-                                          children: <Widget>[
-                                            Center(
-                                              child: AutoSizeText(
-                                                  '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'[
-                                                          list[n * index + ind]]
-                                                      .toString(),
-                                                  minFontSize: 0.0,
-                                                  style:
-                                                      TextStyle(fontSize: d)),
-                                            ),
-                                            TextButton(
-                                              style: TextButton.styleFrom(
-                                                backgroundColor:
-                                                    Colors.transparent,
-                                                shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            0)),
-                                              ),
-                                              child: Text(''),
-                                              onPressed: () {
+                                      child: wheel
+                                          ? ListWheelScrollView.useDelegate(
+                                              diameterRatio: 2,
+                                              physics:
+                                                  FixedExtentScrollPhysics(),
+                                              //useMagnifier: true,
+                                              magnification: 1,
+                                              itemExtent: min(
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .height -
+                                                              d / 18,
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width -
+                                                              80 / n -
+                                                              MediaQuery.of(
+                                                                          context)
+                                                                      .size
+                                                                      .width /
+                                                                  n) /
+                                                      n -
+                                                  40 / n,
+                                              childDelegate:
+                                                  ListWheelChildLoopingListDelegate(
+                                                      children: List.generate(
+                                                          power,
+                                                          (i) => AutoSizeText(
+                                                              '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'[
+                                                                  i],
+                                                              minFontSize: 0.0,
+                                                              style: TextStyle(
+                                                                  fontSize:
+                                                                      d)))),
+                                              onSelectedItemChanged: (inde) {
                                                 setState(() {
-                                                  list[n * index + ind] = (1 +
-                                                          list[n * index +
-                                                              ind]) %
-                                                      power;
+                                                  list[n * index + ind] = inde;
                                                   check(n, index);
                                                 });
                                               },
-                                            ),
-                                          ]),
+                                            )
+                                          : Stack(
+                                              fit: StackFit.expand,
+                                              children: <Widget>[
+                                                  Center(
+                                                    child: AutoSizeText(
+                                                        '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'[
+                                                                list[n * index +
+                                                                    ind]]
+                                                            .toString(),
+                                                        minFontSize: 0.0,
+                                                        style: TextStyle(
+                                                            fontSize: d)),
+                                                  ),
+                                                  TextButton(
+                                                    style: TextButton.styleFrom(
+                                                      backgroundColor:
+                                                          Colors.transparent,
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          0)),
+                                                    ),
+                                                    child: Text(''),
+                                                    onPressed: () {
+                                                      setState(() {
+                                                        list[n * index +
+                                                            ind] = (1 +
+                                                                list[n * index +
+                                                                    ind]) %
+                                                            power;
+                                                        check(n, index);
+                                                      });
+                                                    },
+                                                  ),
+                                                ]),
                                     ),
                                   ),
                                 );
@@ -675,7 +751,7 @@ class _ArityPageState extends State<ArityPage> {
             ),
           ),
           Expanded(
-            child: FlatButton(
+            child: TextButton(
               child: Column(
                 children: [
                   Expanded(

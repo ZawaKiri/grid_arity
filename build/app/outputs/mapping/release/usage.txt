@@ -152,8 +152,8 @@ com.google.common.base.Splitter$SplittingIterator
 com.google.common.collect.Multimaps$MapMultimap$1
 com.google.common.util.concurrent.MoreExecutors$5
 io.flutter.embedding.engine.loader.ApplicationInfoLoader:
-    void <init>()
-    static final java.lang.String NETWORK_POLICY_METADATA_KEY
+    public void <init>()
+    public static final java.lang.String NETWORK_POLICY_METADATA_KEY
 com.google.common.cache.CacheBuilder$2
 javax.inject.Qualifier
 androidx.test.espresso.action.Swiper$Status
@@ -288,10 +288,6 @@ androidx.core.widget.TextViewCompat$OreoCallback
 com.google.common.cache.RemovalCause$2
 org.junit.internal.runners.model.ReflectiveCallable
 com.google.common.collect.TreeMultiset$Reference
-io.flutter.embedding.engine.dynamicfeatures.DynamicFeatureManager:
-    public abstract void loadAssets(int,java.lang.String)
-    public abstract void loadDartLibrary(int,java.lang.String)
-    public abstract void uninstallFeature(int,java.lang.String)
 androidx.core.net.DatagramSocketWrapper
 com.google.common.cache.LocalCache$EntryFactory$7
 com.google.common.hash.LittleEndianByteArray$1
@@ -852,6 +848,7 @@ androidx.test.rule.PortForwardingRule$Builder
 com.google.common.collect.Lists$RandomAccessPartition
 androidx.core.provider.SelfDestructiveThread
 org.hamcrest.collection.IsIterableContainingInOrder
+io.flutter.embedding.engine.deferredcomponents.PlayStoreDeferredComponentManager
 com.google.common.collect.MultimapBuilder$TreeSetSupplier
 org.junit.ComparisonFailure$ComparisonCompactor$DiffExtractor
 io.flutter.embedding.engine.plugins.service.ServicePluginBinding:
@@ -1422,6 +1419,7 @@ androidx.test.espresso.action.GeneralLocation
 androidx.fragment.app.FragmentManager
 androidx.test.internal.runner.junit3.JUnit38ClassRunner$1
 kotlin.collections.ULongIterator
+io.flutter.embedding.engine.FlutterEngineGroup
 com.google.common.collect.ImmutableMap$IteratorBasedImmutableMap
 androidx.test.espresso.base.Interrogator$1
 androidx.test.espresso.base.IdlingResourceRegistry$IdleNotificationCallback
@@ -1543,6 +1541,7 @@ kotlin.time.TestClock
 com.google.common.collect.AbstractBiMap$Inverse
 androidx.test.espresso.core.internal.deps.guava.collect.Iterators$6
 com.google.common.collect.SetMultimap
+io.flutter.embedding.engine.FlutterEngineGroup$1
 com.google.common.collect.Iterables$8
 io.flutter.embedding.android.FlutterEngineProvider
 androidx.test.espresso.remote.annotation.RemoteMsgField
@@ -2103,6 +2102,7 @@ io.flutter.embedding.engine.loader.FlutterLoader:
     public java.lang.String getLookupKeyForAsset(java.lang.String,java.lang.String)
     private static final java.lang.String TAG
     private static final java.lang.String OLD_GEN_HEAP_SIZE_META_DATA_KEY
+    private static final java.lang.String ENABLE_SKPARAGRAPH_META_DATA_KEY
     static final java.lang.String AOT_SHARED_LIBRARY_NAME
     static final java.lang.String SNAPSHOT_ASSET_PATH_KEY
     static final java.lang.String VM_SNAPSHOT_DATA_KEY
@@ -2246,9 +2246,9 @@ kotlin.sequences.GeneratorSequence
 kotlin.sequences.SequencesKt__SequenceBuilderKt$sequence$$inlined$Sequence$1
 androidx.customview.widget.ExploreByTouchHelper
 androidx.annotation.CheckResult
-io.flutter.embedding.engine.systemchannels.PlatformViewsChannel:
-    private static final java.lang.String TAG
 io.flutter.embedding.engine.systemchannels.PlatformChannel:
+    private static final java.lang.String TAG
+io.flutter.embedding.engine.systemchannels.PlatformViewsChannel:
     private static final java.lang.String TAG
 kotlin.Suppress
 com.google.common.collect.Multisets$FilteredMultiset$1
@@ -2451,9 +2451,11 @@ io.flutter.embedding.engine.FlutterEngine:
     public void <init>(android.content.Context,io.flutter.embedding.engine.loader.FlutterLoader,io.flutter.embedding.engine.FlutterJNI)
     public void <init>(android.content.Context,io.flutter.embedding.engine.loader.FlutterLoader,io.flutter.embedding.engine.FlutterJNI,java.lang.String[],boolean)
     public void <init>(android.content.Context,io.flutter.embedding.engine.loader.FlutterLoader,io.flutter.embedding.engine.FlutterJNI,io.flutter.plugin.platform.PlatformViewsController,java.lang.String[],boolean)
+    io.flutter.embedding.engine.FlutterEngine spawn(android.content.Context,io.flutter.embedding.engine.dart.DartExecutor$DartEntrypoint)
     public void addEngineLifecycleListener(io.flutter.embedding.engine.FlutterEngine$EngineLifecycleListener)
     public void removeEngineLifecycleListener(io.flutter.embedding.engine.FlutterEngine$EngineLifecycleListener)
     public io.flutter.embedding.engine.systemchannels.LocalizationChannel getLocalizationChannel()
+    public io.flutter.embedding.engine.systemchannels.DeferredComponentChannel getDeferredComponentChannel()
     public io.flutter.embedding.engine.plugins.service.ServiceControlSurface getServiceControlSurface()
     public io.flutter.embedding.engine.plugins.broadcastreceiver.BroadcastReceiverControlSurface getBroadcastReceiverControlSurface()
     public io.flutter.embedding.engine.plugins.contentprovider.ContentProviderControlSurface getContentProviderControlSurface()
@@ -2636,7 +2638,7 @@ com.google.common.collect.TreeMultiset$Aggregate$2
 androidx.test.espresso.core.internal.deps.guava.util.concurrent.DirectExecutor
 io.flutter.FlutterInjector$Builder:
     public io.flutter.FlutterInjector$Builder setFlutterLoader(io.flutter.embedding.engine.loader.FlutterLoader)
-    public io.flutter.FlutterInjector$Builder setDynamicFeatureManager(io.flutter.embedding.engine.dynamicfeatures.DynamicFeatureManager)
+    public io.flutter.FlutterInjector$Builder setDeferredComponentManager(io.flutter.embedding.engine.deferredcomponents.DeferredComponentManager)
 androidx.fragment.app.Fragment$InstantiationException
 com.google.common.escape.Escapers$Builder
 kotlin.sequences.FlatteningSequence$iterator$1
@@ -3096,6 +3098,9 @@ com.google.common.base.Converter$FunctionBasedConverter
 androidx.core.app.ActivityOptionsCompat
 com.google.common.collect.CompactHashMap$3
 com.google.common.collect.Synchronized$1
+io.flutter.embedding.engine.deferredcomponents.DeferredComponentManager:
+    public abstract void loadAssets(int,java.lang.String)
+    public abstract void loadDartLibrary(int,java.lang.String)
 com.google.common.base.CharMatcher$SingleWidth
 com.google.common.collect.Iterators$EmptyModifiableIterator
 com.google.common.base.Functions$SupplierFunction
@@ -3436,6 +3441,7 @@ io.flutter.plugins.pathprovider.PathProviderPlugin:
     public static void registerWith(io.flutter.plugin.common.PluginRegistry$Registrar)
 androidx.viewpager.widget.ViewPager$LayoutParams
 androidx.core.content.pm.ShortcutInfoCompatSaver
+io.flutter.embedding.engine.deferredcomponents.PlayStoreDeferredComponentManager$1
 kotlin.sequences.SequencesKt___SequencesKt$minus$3$iterator$1
 androidx.fragment.app.FragmentTransitionCompat21
 com.google.common.base.Supplier
@@ -3939,6 +3945,7 @@ androidx.core.view.ViewCompat$2
 com.google.common.collect.MapMakerInternalMap$EntrySet
 com.google.common.collect.MultimapBuilder$4
 androidx.loader.content.ModernAsyncTask$AsyncTaskResult
+io.flutter.embedding.engine.deferredcomponents.PlayStoreDeferredComponentManager$FeatureInstallStateUpdatedListener
 com.google.common.util.concurrent.WrappingExecutorService$1
 kotlin.collections.AbstractMap$keys$1$iterator$1
 androidx.test.espresso.core.internal.deps.guava.cache.LocalCache$WeakAccessEntry
@@ -4203,6 +4210,10 @@ junit.framework.TestSuite$1
 androidx.core.app.ActivityRecreator$LifecycleCheckCallbacks
 com.google.common.graph.AbstractValueGraph$2
 androidx.fragment.app.FragmentManagerImpl$6
+io.flutter.embedding.engine.systemchannels.DeferredComponentChannel:
+    public void completeInstallSuccess(java.lang.String)
+    public void completeInstallError(java.lang.String,java.lang.String)
+    private static final java.lang.String TAG
 kotlin.coroutines.CoroutineContext$DefaultImpls
 com.google.common.graph.AbstractUndirectedNetworkConnections
 com.google.common.cache.LocalCache$WeakAccessEntry
@@ -4320,7 +4331,10 @@ com.google.common.io.ByteSource$EmptyByteSource
 com.google.common.reflect.TypeResolver$WildcardCapturer$1
 androidx.core.widget.TintableCompoundButton
 kotlin.jvm.internal.PropertyReference0
-io.flutter.util.Preconditions
+io.flutter.util.Preconditions:
+    private void <init>()
+    public static java.lang.Object checkNotNull(java.lang.Object)
+    public static void checkState(boolean)
 com.google.common.graph.EndpointPairIterator
 androidx.test.espresso.core.internal.deps.guava.cache.Cache
 kotlin.collections.ReversedListReadOnly
@@ -4847,7 +4861,6 @@ androidx.test.internal.util.LogUtil$$Lambda$1
 kotlin.time.ClockMark
 androidx.test.internal.runner.filters.ParentFilter
 com.google.common.util.concurrent.MoreExecutors
-io.flutter.embedding.engine.dynamicfeatures.PlayStoreDynamicFeatureManager$FeatureInstallStateUpdatedListener
 com.google.common.util.concurrent.JdkFutureAdapters$ListenableFutureAdapter
 androidx.test.espresso.Espresso
 com.google.common.collect.Synchronized$SynchronizedRandomAccessList
@@ -4875,7 +4888,6 @@ org.junit.internal.InexactComparisonCriteria
 kotlin.coroutines.experimental.migration.ContextMigration$Key
 com.google.common.base.FinalizableReferenceQueue$SystemLoader
 kotlin.io.LinesSequence$iterator$1
-io.flutter.embedding.engine.dynamicfeatures.PlayStoreDynamicFeatureManager$1
 androidx.test.espresso.core.internal.deps.guava.util.concurrent.AbstractFuture$Failure$1
 androidx.core.app.JobIntentService$GenericWorkItem
 androidx.test.espresso.action.GeneralLocation$10
@@ -4956,7 +4968,6 @@ com.google.common.graph.Traverser$GraphTraverser$DepthFirstIterator
 kotlin.sequences.SequencesKt___SequencesKt$filterIndexed$1
 com.google.common.util.concurrent.SmoothRateLimiter$1
 androidx.test.rule.GrantPermissionRule
-io.flutter.embedding.engine.dynamicfeatures.PlayStoreDynamicFeatureManager
 com.google.common.util.concurrent.Callables$2
 com.google.common.collect.Interner
 androidx.test.internal.runner.TestSize
@@ -5378,6 +5389,7 @@ androidx.test.espresso.action.Swiper
 com.google.common.collect.ArrayTable
 io.flutter.embedding.engine.dart.DartExecutor$DartEntrypoint:
     public static io.flutter.embedding.engine.dart.DartExecutor$DartEntrypoint createDefault()
+    public void <init>(java.lang.String,java.lang.String,java.lang.String)
 com.google.common.math.BigIntegerMath
 androidx.test.platform.ui.InjectEventSecurityException
 androidx.fragment.app.ListFragment$1
@@ -6126,8 +6138,8 @@ io.flutter.plugin.mouse.MouseCursorPlugin$2:
 io.flutter.plugin.editing.TextInputPlugin$2:
     final synthetic io.flutter.plugin.editing.TextInputPlugin this$0
 io.flutter.embedding.engine.loader.FlutterApplicationInfo:
-    final java.lang.String vmSnapshotData
-    final java.lang.String isolateSnapshotData
+    public final java.lang.String vmSnapshotData
+    public final java.lang.String isolateSnapshotData
 io.flutter.plugin.platform.VirtualDisplayController$1:
     final synthetic io.flutter.plugin.platform.VirtualDisplayController this$0
 io.flutter.view.AccessibilityBridge$SemanticsNode:

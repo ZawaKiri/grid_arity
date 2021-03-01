@@ -1,4 +1,0 @@
-#Mon Mar 01 14:14:16 CET 2021
-base.0=/home/anamsaidie/AndroidStudioProjects/grid_arity/build/app/intermediates/dex/release/minifyReleaseWithR8/classes.dex
-path.0=classes.dex
-renamed.0=classes.dex

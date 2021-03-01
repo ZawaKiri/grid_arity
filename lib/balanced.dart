@@ -123,7 +123,10 @@ class _BalancedPageState extends State<BalancedPage> {
                   sw.reset();
                   ta = 0;
                   liste = List.generate(
-                      n, (index) => Random().nextInt(pow(power, n)) - (pow(power, n) - 1) ~/ 2);
+                      n,
+                      (index) =>
+                          Random().nextInt(pow(power, n)) -
+                          (pow(power, n) - 1) ~/ 2);
                   list = List.filled(n * n, 0);
                   Navigator.pop(context);
                   startTimer();
@@ -308,8 +311,14 @@ class _BalancedPageState extends State<BalancedPage> {
                                                       children: List.generate(
                                                           power,
                                                           (i) => AutoSizeText(
-                                                              liliste[i]
-                                                                  .toString(),
+                                                              power == 3
+                                                                  ? [
+                                                                      '0',
+                                                                      '+',
+                                                                      '-'
+                                                                    ][i]
+                                                                  : liliste[i]
+                                                                      .toString(),
                                                               minFontSize: 0.0,
                                                               style: TextStyle(
                                                                   fontSize:
@@ -317,8 +326,10 @@ class _BalancedPageState extends State<BalancedPage> {
                                               onSelectedItemChanged: (inde) {
                                                 setState(() {
                                                   print('inde = $inde');
-                                                  print('len = ${liliste.length}');
-                                                  list[n * index + ind] = liliste[inde];
+                                                  print(
+                                                      'len = ${liliste.length}');
+                                                  list[n * index + ind] =
+                                                      liliste[inde];
                                                   check(n, index);
                                                 });
                                               },
@@ -329,7 +340,8 @@ class _BalancedPageState extends State<BalancedPage> {
                                                   Center(
                                                     child: AutoSizeText(
                                                         liliste[list[n * index +
-                                                                ind] % power]
+                                                                    ind] %
+                                                                power]
                                                             .toString(),
                                                         minFontSize: 0.0,
                                                         style: TextStyle(
@@ -433,7 +445,10 @@ class _BalancedPageState extends State<BalancedPage> {
                   ta = 0;
                   timer.cancel();
                   liste = List.generate(
-                      n, (index) => Random().nextInt(pow(power, n)) - (pow(power, n) - 1) ~/ 2);
+                      n,
+                      (index) =>
+                          Random().nextInt(pow(power, n)) -
+                          (pow(power, n) - 1) ~/ 2);
                   list = List.filled(n * n, 0);
                   startTimer();
                 });

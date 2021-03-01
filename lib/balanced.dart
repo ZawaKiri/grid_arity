@@ -58,7 +58,6 @@ class _BalancedPageState extends State<BalancedPage> {
   var timer = Timer(Duration(seconds: 0), null);
 
   void check(n, i) {
-    print('list = $list');
     int a = 0;
     for (int f = 0; f < n; f++) {
       a += list[i * n + f] * pow(power, n - f - 1);
@@ -158,6 +157,7 @@ class _BalancedPageState extends State<BalancedPage> {
   }
 
   void startTimer() {
+    print('power : $power');
     sw.start();
     for (int f = 0; f < n; f++) check(n, f);
     timer = Timer.periodic(Duration(seconds: 1), (timer) {
@@ -325,9 +325,6 @@ class _BalancedPageState extends State<BalancedPage> {
                                                                       d)))),
                                               onSelectedItemChanged: (inde) {
                                                 setState(() {
-                                                  print('inde = $inde');
-                                                  print(
-                                                      'len = ${liliste.length}');
                                                   list[n * index + ind] =
                                                       liliste[inde];
                                                   check(n, index);
@@ -339,10 +336,16 @@ class _BalancedPageState extends State<BalancedPage> {
                                               children: <Widget>[
                                                   Center(
                                                     child: AutoSizeText(
-                                                        liliste[list[n * index +
-                                                                    ind] %
-                                                                power]
-                                                            .toString(),
+                                                        power == 3
+                                                            ? ['0', '+', '-'][
+                                                                list[n * index +
+                                                                        ind] %
+                                                                    power]
+                                                            : liliste[list[n *
+                                                                            index +
+                                                                        ind] %
+                                                                    power]
+                                                                .toString(),
                                                         minFontSize: 0.0,
                                                         style: TextStyle(
                                                             fontSize: d)),

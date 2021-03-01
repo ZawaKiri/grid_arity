@@ -123,7 +123,7 @@ class _BalancedPageState extends State<BalancedPage> {
                   sw.reset();
                   ta = 0;
                   liste = List.generate(
-                      n, (index) => Random().nextInt(pow(power, n)));
+                      n, (index) => Random().nextInt(pow(power, n)) - (pow(power, n) - 1) ~/ 2);
                   list = List.filled(n * n, 0);
                   Navigator.pop(context);
                   startTimer();
